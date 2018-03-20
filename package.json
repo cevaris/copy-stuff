@@ -16,5 +16,9 @@
     "electron-connect": "^0.6.3",
     "flow-bin": "^0.68.0",
     "gulp": "^3.9.1"
+  },
+  "dependencies": {
+    "moment": "^2.21.0",
+    "nedb": "^1.8.0"
   }
 }
