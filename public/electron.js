@@ -37,8 +37,21 @@ function createWindow() {
         win = null
     });
 
+    app.dock.hide();
+    win.setAlwaysOnTop(true, "floating");
+    win.setVisibleOnAllWorkspaces(true);
+    win.setFullScreenable(false);
+    win.hide();
+    
+    win.on('blur', () => {
+        console.log('hiding');
+        win.hide();
+    });
+    globalShortcut.register('ctrl+super+v', () => {
+        console.log('ctrl+super+v is pressed');
+        win.show();
+    });
     console.log('launching window');
-    // client.create(win);
 }
 
 // This method will be called when Electron has finished
