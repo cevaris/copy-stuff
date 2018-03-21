@@ -1,7 +1,10 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 *.iml
+
 dist/
 node_modules/
+build/
+
 *.log
 *.db

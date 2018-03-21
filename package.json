@@ -1,14 +1,26 @@
 {
   "name": "copy-stuff",
   "version": "1.0.0",
+  "build": {
+    "appId": "com.cevaris.copystuff",
+    "productName": "CopyStuff",
+    "mac": {
+      "category": "your.app.category.type"
+    }
+  },
   "description": "",
+  "homepage": "./",
   "main": "public/electron.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
+    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-pack": "build -c.extraMetadata.main=build/electron.js",
+    "electron-release": "build -c.extraMetadata.main=build/electron.js --publish=always",
+    "preelectron-pack": "yarn build",
+    "preelectron-release": "yarn build"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +32,6 @@
     "electron-builder": "^20.5.1",
     "electron-connect": "^0.6.3",
     "flow-bin": "^0.68.0",
-    "gulp": "^3.9.1",
     "react-scripts": "1.1.1",
     "wait-on": "^2.1.0"
   },
