@@ -1,8 +1,9 @@
 const {app, clipboard, globalShortcut, BrowserWindow, ipcMain} = require('electron');
-const {client} = require('electron-connect');
+// const {client} = require('electron-connect');
 const path = require('path');
 const url = require('url');
 const moment = require('moment');
+const isDev = require('electron-is-dev');
 
 const Datastore = require('nedb');
 let db = new Datastore({
@@ -21,12 +22,9 @@ function createWindow() {
         height: 600
     });
 
-    // and load the index.html of the app.
-    win.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
+    win.loadURL(
+        isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`
+    );
 
     // Open the DevTools.
     win.webContents.openDevTools();
@@ -40,7 +38,7 @@ function createWindow() {
     });
 
     console.log('launching window');
-    client.create(win);
+    // client.create(win);
 }
 
 // This method will be called when Electron has finished

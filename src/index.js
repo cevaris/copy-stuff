@@ -1,5 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
 
-'use strict';
-
-console.log('Hello, renderer window!');
-console.log('electron version: ' + process.versions.electron);
+ReactDOM.render(<App />, document.getElementById('root'));
+registerServiceWorker();

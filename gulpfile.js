@@ -8,7 +8,7 @@ gulp.task('serve', function () {
     electron.start();
 
     // Restart browser process
-    gulp.watch('src/app.js', electron.restart);
+    gulp.watch('src/electron.js', electron.restart);
 
     // Reload renderer process
     gulp.watch(['src/index.js', 'src/index.html'], electron.reload);
