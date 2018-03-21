@@ -1,15 +1,6 @@
-const {app, clipboard, globalShortcut, BrowserWindow, ipcMain} = require('electron');
-// const {client} = require('electron-connect');
+const {app, clipboard, globalShortcut, BrowserWindow} = require('electron');
 const path = require('path');
-const url = require('url');
-const moment = require('moment');
 const isDev = require('electron-is-dev');
-
-const Datastore = require('nedb');
-let db = new Datastore({
-    filename: './data.db',
-    autoload: false
-});
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -42,7 +33,7 @@ function createWindow() {
     win.setVisibleOnAllWorkspaces(true);
     win.setFullScreenable(false);
     win.hide();
-    
+
     win.on('blur', () => {
         console.log('hiding');
         win.hide();
@@ -84,70 +75,6 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-let last;
-const check_clipboard_for_changes = () => {
-    const current = clipboard.readText() || clipboard.readText('selection');
-
-    if (!current) {
-        clipboard.writeText('', 'selction');
-        clipboard.writeText('');
-    }
-
-    if (!last) {
-        last = '';
-    }
-
-    if (current !== last && current !== '') {
-        last = current;
-        console.log(current);
-        // add to list
-
-        const doc = mkClip(current);
-        db.insert(doc, function (err, newDoc) {
-            if (handleErr(err)) return;
-            console.log(newDoc);
-
-            getClips(function (err, docs) {
-                if (handleErr(err)) return;
-                renderClips(docs);
-            });
-        });
-    }
+global.currentClipboard = () => {
+    return clipboard.readText() || clipboard.readText('selection');
 };
-
-const getClips = (func) => {
-    db.find({})
-        .sort({createdAt: -1})
-        .limit(10)
-        .exec(func);
-};
-
-const mkClip = (clip) => {
-    const unixMs = moment.utc().valueOf();
-    return {
-        text: clip,
-        createdAt: unixMs
-    }
-};
-
-const renderClips = (clips) => {
-    console.log(clips);
-};
-
-const handleErr = (err) => {
-    if (err) {
-        console.log(err);
-    }
-    return err;
-};
-
-// Subscribers
-// Check for changes at an interval.
-setInterval(check_clipboard_for_changes, 200);
-
-db.loadDatabase(function (err) {
-    getClips(function (err, docs) {
-        if (handleErr(err)) return;
-        renderClips(docs);
-    });
-});
