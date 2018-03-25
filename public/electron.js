@@ -38,6 +38,7 @@ function createWindow() {
         console.log('hiding');
         win.hide();
     });
+
     globalShortcut.register('ctrl+super+v', () => {
         console.log('ctrl+super+v is pressed');
         win.show();
@@ -77,4 +78,8 @@ app.on('activate', () => {
 // code. You can also put them in separate files and require them here.
 global.currentClipboard = () => {
     return clipboard.readText() || clipboard.readText('selection');
+};
+
+global.hide = () => {
+    win.hide();
 };

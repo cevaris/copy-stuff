@@ -7,6 +7,7 @@ import moment from 'moment';
 
 const remote = window.require('electron').remote;
 const clipboard = remote.getGlobal('currentClipboard');
+const hideWindow = remote.getGlobal('hide');
 let last = '';
 
 const Datastore = require('nedb');
@@ -58,6 +59,18 @@ db.loadDatabase(function (err) {
 // Check for changes at an interval.
 setInterval(check_clipboard_for_changes, 200);
 
+document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    let isEscape = false;
+    if ("key" in evt) {
+        isEscape = (evt.key === "Escape" || evt.key === "Esc");
+    } else {
+        isEscape = (evt.keyCode === 27);
+    }
+    if (isEscape) {
+        hideWindow();
+    }
+};
 
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

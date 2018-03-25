@@ -28,10 +28,10 @@ class App extends Component {
             const text = clip.text || '';
             const createdAt = moment.unix(clip.createdAtMs / 1000).format('dddd, MMMM Do, YYYY h:mm:ss A');
             return (
-                <LazyLoad height={20} key={i} offset={10} once={true}>
-                    <div style={{'text-align': 'left', 'word-wrap': 'break-word'}}>
+                <LazyLoad height={20} key={i}>
+                    <div style={{textAlign: 'left', wordWrap: 'break-word'}}>
                         {createdAt}:
-                        <pre>{text}</pre>
+                        <pre style={{wordWrap: 'break-word'}}>{text}</pre>
                     </div>
                 </LazyLoad>
             )
