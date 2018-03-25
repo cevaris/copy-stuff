@@ -25,10 +25,13 @@ class App extends Component {
 
     _list() {
         return this.state.clips.map((clip, i) => {
+            const text = clip.text || '';
+            const createdAt = moment.unix(clip.createdAtMs / 1000).format('dddd, MMMM Do, YYYY h:mm:ss A');
             return (
-                <LazyLoad height={20} key={i} offset={100} once={true}>
-                    <div>
-                        {clip.text}: {moment.unix(clip.createdAtMs/1000).format('dddd, MMMM Do, YYYY h:mm:ss A')}
+                <LazyLoad height={20} key={i} offset={10} once={true}>
+                    <div style={{'text-align': 'left', 'word-wrap': 'break-word'}}>
+                        {createdAt}:
+                        <pre>{text}</pre>
                     </div>
                 </LazyLoad>
             )
