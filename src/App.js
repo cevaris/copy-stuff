@@ -21,6 +21,7 @@ class App extends Component {
                 clips: docs
             });
         });
+
     }
 
     _list() {

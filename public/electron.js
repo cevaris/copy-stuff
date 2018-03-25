@@ -2,6 +2,13 @@ const {app, clipboard, globalShortcut, BrowserWindow} = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
+const Datastore = require('nedb');
+global.db = new Datastore({
+    filename: 'var/data.db',
+    autoload: true
+});
+
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;

@@ -8,13 +8,8 @@ import moment from 'moment';
 const remote = window.require('electron').remote;
 const clipboard = remote.getGlobal('currentClipboard');
 const hideWindow = remote.getGlobal('hide');
+const db = remote.getGlobal('db');
 let last = '';
-
-const Datastore = require('nedb');
-const db = new Datastore({
-    filename: './data.db',
-    autoload: false
-});
 
 const check_clipboard_for_changes = () => {
     const current = clipboard() || '';
@@ -49,11 +44,6 @@ export const handleErr = (err) => {
     }
     return err;
 };
-
-db.loadDatabase(function (err) {
-    if (handleErr(err)) return;
-    console.log('loaded db');
-});
 
 // Subscribers
 // Check for changes at an interval.
