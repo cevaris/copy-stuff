@@ -11,10 +11,18 @@ const hideWindow = remote.getGlobal('hide');
 const db = remote.getGlobal('db');
 let last = '';
 
-const check_clipboard_for_changes = () => {
-    const current = clipboard() || '';
+const checkClipboardForChanges = () => {
+    const current = clipboard();
 
-    if (current !== last && current !== '') {
+    // if clipboard sent junk
+    if (!current) return;
+
+    //handle init when last = ''
+    if(!last){
+        last = current;
+    }
+    
+    if (current !== last) {
         last = current;
 
         const doc = mkClip(current);
@@ -47,7 +55,7 @@ export const handleErr = (err) => {
 
 // Subscribers
 // Check for changes at an interval.
-setInterval(check_clipboard_for_changes, 200);
+setInterval(checkClipboardForChanges, 200);
 
 document.onkeydown = function(evt) {
     evt = evt || window.event;
