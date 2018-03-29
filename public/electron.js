@@ -50,6 +50,7 @@ function createWindow() {
         console.log('ctrl+super+v is pressed');
         win.show();
     });
+
     console.log('launching window');
 }
 

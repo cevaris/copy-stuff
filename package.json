@@ -38,6 +38,7 @@
   "dependencies": {
     "electron-is-dev": "^0.3.0",
     "moment": "^2.21.0",
+    "mousetrap": "^1.6.1",
     "nedb": "^1.8.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

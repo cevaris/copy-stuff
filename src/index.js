@@ -5,6 +5,8 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import moment from 'moment';
 
+const Mousetrap = require('mousetrap');
+
 const remote = window.require('electron').remote;
 const clipboard = remote.getGlobal('currentClipboard');
 const hideWindow = remote.getGlobal('hide');
@@ -57,18 +59,9 @@ export const handleErr = (err) => {
 // Check for changes at an interval.
 setInterval(checkClipboardForChanges, 200);
 
-document.onkeydown = function(evt) {
-    evt = evt || window.event;
-    let isEscape = false;
-    if ("key" in evt) {
-        isEscape = (evt.key === "Escape" || evt.key === "Esc");
-    } else {
-        isEscape = (evt.keyCode === 27);
-    }
-    if (isEscape) {
-        hideWindow();
-    }
-};
+Mousetrap.bind(['escape'], () => {
+    hideWindow();
+});
 
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
