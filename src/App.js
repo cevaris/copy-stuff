@@ -3,7 +3,6 @@ import LazyLoad from 'react-lazyload';
 import logo from './logo.svg';
 import './App.css';
 import {getClips, handleErr} from "./index";
-import {debounce} from "./utils";
 import moment from 'moment';
 
 const Mousetrap = require('mousetrap');
@@ -15,7 +14,6 @@ class App extends Component {
 
         this.state = {
             clips: [],
-            clipIndex: 0
         };
 
         const ref = this;
@@ -27,23 +25,17 @@ class App extends Component {
             });
         });
 
-        Mousetrap.bind(['j', 'down'], debounce(() => {
-            ref.setState({
-                clipIndex: ref.state.clipIndex + 1
-            });
-            console.log('send down', ref.state.clipIndex);
-        }, 10));
-        Mousetrap.bind(['k', 'up'], debounce(() => {
-            let clipIndex = ref.state.clipIndex;
-            if(clipIndex > 0) {
-                clipIndex--;
+        let _clipIndex = 0;
+        Mousetrap.bind(['j', 'down'], () => {
+            _clipIndex++;
+            console.log('send down', _clipIndex);
+        });
+        Mousetrap.bind(['k', 'up'], () => {
+            if (_clipIndex > 0) {
+                _clipIndex--;
             }
-
-            ref.setState({
-                clipIndex: clipIndex
-            })
-            console.log('send up', ref.state.clipIndex);
-        }, 10));
+            console.log('send up', _clipIndex);
+        });
     }
 
     _list() {
