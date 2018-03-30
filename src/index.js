@@ -20,10 +20,10 @@ const checkClipboardForChanges = () => {
     if (!current) return;
 
     //handle init when last = ''
-    if(!last){
+    if (!last) {
         last = current;
     }
-    
+
     if (current !== last) {
         last = current;
 
@@ -34,9 +34,13 @@ const checkClipboardForChanges = () => {
     }
 };
 
-export const getClips = (func) => {
+export const getClips = (page, func) => {
+    const pageSize = 10;
+
     db.find({})
         .sort({createdAtMs: -1})
+        .skip(page * pageSize)
+        .limit(pageSize)
         .exec(func);
 };
 
@@ -63,5 +67,5 @@ Mousetrap.bind(['escape'], () => {
     hideWindow();
 });
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
 registerServiceWorker();

@@ -4,47 +4,85 @@ import logo from './logo.svg';
 import './App.css';
 import {getClips, handleErr} from "./index";
 import moment from 'moment';
+import InfiniteScroll from 'react-infinite-scroller';
+import 'react-virtualized/styles.css'
+
 
 const Mousetrap = require('mousetrap');
 
 
 class App extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.loadItems = this.loadItems.bind(this);
 
         this.state = {
             clips: [],
+            clipIndex: 0,
+            hasMoreItems: true
         };
 
-        const ref = this;
 
-        getClips((err, docs) => {
+        const ref = this;
+        getClips(0, (err, docs) => {
             if (handleErr(err)) return;
+            console.log('first page', docs);
             ref.setState({
                 clips: docs
             });
         });
 
-        let _clipIndex = 0;
         Mousetrap.bind(['j', 'down'], () => {
-            _clipIndex++;
-            console.log('send down', _clipIndex);
+            if (this.state.clipIndex < this.state.clips.length) {
+                this.setState({
+                    clipIndex: this.state.clipIndex + 1
+                });
+                console.log(this.state.clipIndex);
+            }
         });
         Mousetrap.bind(['k', 'up'], () => {
-            if (_clipIndex > 0) {
-                _clipIndex--;
+            if (this.state.clipIndex > 0) {
+                this.setState({
+                    clipIndex: this.state.clipIndex - 1
+                });
+                console.log(this.state.clipIndex);
             }
-            console.log('send up', _clipIndex);
         });
     }
 
-    _list() {
+    loadItems(page) {
+        const ref = this;
+        getClips(page, (err, docs) => {
+            console.log(page, this.state, ':', docs, ':');
+
+            if (handleErr(err)) return;
+
+            if (docs.length === 0) {
+                ref.setState({
+                    hasMoreItems: false
+                });
+                return;
+            }
+
+            ref.setState({
+                clips: this.state.clips.concat(docs)
+            });
+        });
+    }
+
+    renderItems() {
+        const clipIndex = this.state.clipIndex;
         return this.state.clips.map((clip, i) => {
             const text = clip.text || '';
             const createdAt = moment.unix(clip.createdAtMs / 1000).format('dddd, MMMM Do, YYYY h:mm:ss A');
+            let className = '';
+
+            if (i === clipIndex) {
+                className = 'selected-clip';
+            }
             return (
-                <LazyLoad height={20} key={i}>
-                    <div style={{textAlign: 'left', wordWrap: 'break-word'}}>
+                <LazyLoad height={20} key={`${clip.createdAtMs}-${i}`}>
+                    <div className={className} style={{textAlign: 'left', wordWrap: 'break-word'}}>
                         {createdAt}:
                         <pre style={{wordWrap: 'break-word'}}>{text}</pre>
                     </div>
@@ -55,7 +93,7 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div className="App" onKeyPressCapture={this.inputListener}>
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
                     <h1 className="App-title">Welcome to React</h1>
@@ -64,7 +102,14 @@ class App extends Component {
                     To get started, edit <code>src/App.js</code> and save to reload.
                 </p>
                 <div className="list">
-                    {this._list()}
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={this.loadItems}
+                        hasMore={this.state.hasMoreItems}
+                        loader={<div className="loader" key={0}>Loading ...</div>}
+                    >
+                        {this.renderItems()}
+                    </InfiniteScroll>
                 </div>
             </div>
         );
