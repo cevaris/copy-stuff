@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "electron-is-dev": "^0.3.0",
+    "immutable": "^3.8.2",
     "moment": "^2.21.0",
     "mousetrap": "^1.6.1",
     "nedb": "^1.8.0",

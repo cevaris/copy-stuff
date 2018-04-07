@@ -11,6 +11,8 @@ const remote = window.require('electron').remote;
 const clipboard = remote.getGlobal('currentClipboard');
 const hideWindow = remote.getGlobal('hide');
 const db = remote.getGlobal('db');
+
+export let clipsCount = 0;
 let last = '';
 
 const checkClipboardForChanges = () => {
@@ -31,6 +33,8 @@ const checkClipboardForChanges = () => {
         db.insert(doc, function (err, newDoc) {
             if (handleErr(err)) return;
         });
+
+        updateClipCount();
     }
 };
 
@@ -42,6 +46,33 @@ export const getClips = (page, func) => {
         .skip(page * pageSize)
         .limit(pageSize)
         .exec(func);
+};
+
+export const getClipsSlice = (start, offset, func) => {
+    db.find({})
+        .sort({createdAtMs: -1})
+        .skip(start)
+        .limit(offset)
+        .exec(func);
+};
+
+
+// const getAllClips = (func) => {
+//     db.find({})
+//         .sort({createdAtMs: -1})
+//         .exec(func);
+// };
+
+const updateClipCount = () => {
+    getClipCount((err, count) => {
+        if (handleErr(err)) return;
+        clipsCount = count;
+    });
+};
+
+
+export const getClipCount = (func) => {
+    db.count({}).exec(func);
 };
 
 const mkClip = (clip) => {
@@ -66,6 +97,8 @@ setInterval(checkClipboardForChanges, 200);
 Mousetrap.bind(['escape'], () => {
     hideWindow();
 });
+
+updateClipCount();
 
 ReactDOM.render(<App/>, document.getElementById('root'));
 registerServiceWorker();
