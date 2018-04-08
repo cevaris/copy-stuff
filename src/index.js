@@ -19,7 +19,7 @@ let currentApp = null;
 const checkClipboardForChanges = () => {
     const sampledApp = sampleCurrentApp();
     if(sampledApp && sampledApp.owner && sampledApp.owner.bundleId){
-        currentApp = sampledApp.owner.bundleId;
+        currentApp = sampledApp;
     }
 
     const current = clipboard();
@@ -35,8 +35,9 @@ const checkClipboardForChanges = () => {
     if (current !== last) {
         last = current;
 
-        const doc = mkClip(current);
+        const doc = mkClip(current, currentApp);
 
+        console.log(currentApp);
         db.update({text: doc.text}, {$set: {createdAtMs: doc.createdAtMs}}, {}, function (err, numReplaced) {
             if (handleErr(err)) return;
             if (numReplaced > 0) {
@@ -60,11 +61,13 @@ export const getClips = (page, func) => {
         .exec(func);
 };
 
-const mkClip = (clip) => {
-    const unixMs = moment.utc().valueOf();
+const mkClip = (clip, app) => {
+        const unixMs = moment.utc().valueOf();
     return {
         text: clip,
-        createdAtMs: unixMs
+        createdAtMs: unixMs,
+        applicationId: app.owner.bundleId || null,
+        applicationName: app.owner.name || null
     }
 };
 
