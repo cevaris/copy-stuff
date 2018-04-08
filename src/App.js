@@ -15,7 +15,6 @@ class App extends Component {
 
         this.state = {
             clips: [],
-            clipIndex: 0,
             hasMoreItems: true
         };
 
@@ -75,7 +74,6 @@ class App extends Component {
     }
 
     renderItems() {
-        const clipIndex = this.state.clipIndex;
         return this.state.clips.map((clip, i) => {
             const text = clip.text || '';
             const createdAt = moment.unix(clip.createdAtMs / 1000).format('dddd, MMMM Do, YYYY h:mm:ss A');

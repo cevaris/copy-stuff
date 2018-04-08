@@ -29,8 +29,16 @@ const checkClipboardForChanges = () => {
         last = current;
 
         const doc = mkClip(current);
-        db.insert(doc, function (err, newDoc) {
+
+        db.update({text: doc.text}, {$set: {createdAtMs: doc.createdAtMs}}, {}, function (err, numReplaced) {
             if (handleErr(err)) return;
+            if (numReplaced > 0) {
+                console.log('updated', doc);
+            } else {
+                db.insert(doc, function (err, _) {
+                    if (handleErr(err)) return;
+                });
+            }
         });
     }
 };
