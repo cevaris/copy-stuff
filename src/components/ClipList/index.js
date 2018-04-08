@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
-import {getClips, handleErr} from "../../index";
+import {getClips, handleErr, writeToClipboard} from "../../index";
 import moment from 'moment';
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -17,6 +17,7 @@ class ClipList extends Component {
         };
 
         this.loadItems = this.loadItems.bind(this);
+        this.copyClip = this.copyClip.bind(this);
         this.textInput = null;
         this.setTextInputRef = element => {
             this.textInput = element;
@@ -36,13 +37,28 @@ class ClipList extends Component {
                 next.focus();
             }
         });
+        Mousetrap.bind(['enter'], this.copyClip);
+    }
+
+    copyClip(e) {
+        let target = e.target;
+
+        // onclick may have been child class, look at parent
+        if(e.target.parentElement.className.includes('clip-item')){
+            target = e.target.parentElement;
+        }
+
+        const data = target.getAttribute('data-text');
+        if (data && data.trim()) {
+            writeToClipboard(data);
+        }
     }
 
     loadItems(page) {
         console.log(page);
 
         const ref = this;
-        getClips(page, (err, docs) => {
+        getClips(page, {}, (err, docs) => {
 
             if (handleErr(err)) return;
 
@@ -69,6 +85,7 @@ class ClipList extends Component {
                     <div
                         className={'clip-item'}
                         data-text={text}
+                        onClick={this.copyClip}
                         style={{textAlign: 'left', wordWrap: 'break-word'}}
                         tabIndex={i}
                         ref={i === 0 && this.setTextInputRef}

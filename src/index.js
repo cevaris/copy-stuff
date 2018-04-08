@@ -51,10 +51,11 @@ const checkClipboardForChanges = () => {
     }
 };
 
-export const getClips = (page, func) => {
+export const getClips = (page, param, func) => {
     const pageSize = 50;
+    const searchParam = param || {};
 
-    db.find({})
+    db.find(searchParam)
         .sort({createdAtMs: -1})
         .skip(page * pageSize)
         .limit(pageSize)
