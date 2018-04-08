@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
-import logo from './logo.svg';
 import './App.css';
 import {getClips, handleErr} from "./index";
 import moment from 'moment';
@@ -13,7 +12,6 @@ const Mousetrap = require('mousetrap');
 class App extends Component {
     constructor(props) {
         super(props);
-        this.loadItems = this.loadItems.bind(this);
 
         this.state = {
             clips: [],
@@ -22,55 +20,50 @@ class App extends Component {
             firstDiv: undefined
         };
 
-        const ref = this;
-        getClips(0, (err, docs) => {
-            if (handleErr(err)) return;
-            console.log('first page', docs);
-            ref.setState({
-                clips: List(docs),
-            });
-        });
+        // const ref = this;
+        // getClips(0, (err, docs) => {
+        //     if (handleErr(err)) return;
+        //     console.log('first page', docs);
+        //     ref.setState({
+        //         clips: List(docs),
+        //     });
+        // });
 
         Mousetrap.bind(['j', 'down'], (e) => {
             console.log(e);
             if (this.textInput) this.textInput.focus();
             let next = e.target.nextSibling;
-            if (next) {
+            if (next && e.target.className.includes('clip-item')) {
                 next.focus();
             }
-            // Mousetrap.trigger('tab');
-            // const form = event.target.form;
-            // const index = Array.prototype.indexOf.call(form, event.target);
-            // form.elements[index + 1].focus();
-            // event.preventDefault();
-            //
-            // if (this.state.clipIndex < this.state.clips.size) {
-            //     this.setState({
-            //         clipIndex: this.state.clipIndex + 1
-            //     });
-            //     console.log(this.state.clipIndex);
-            // }
         });
         Mousetrap.bind(['k', 'up'], (e) => {
             console.log(e);
             if (this.textInput) this.textInput.focus();
             let next = e.target.previousSibling;
-            if (next) {
+            if (next && e.target.className.includes('clip-item')) {
                 next.focus();
             }
-            // Mousetrap.trigger('shift+tab');
-            // if (this.state.clipIndex > 0) {
-            //     this.setState({
-            //         clipIndex: this.state.clipIndex - 1
-            //     });
-            //     console.log(this.state.clipIndex);
-            // }
         });
 
+        Mousetrap.bind(['pageup', 'pagedown'], (e) => {
+            // disable buttons
+            return false;
+        });
+
+        Mousetrap.bind(['enter'], (e) => {
+            console.log(e, e.target.getAttribute('data-text'));
+        });
+
+        this.loadItems = this.loadItems.bind(this);
         this.textInput = null;
         this.setTextInputRef = element => {
             this.textInput = element;
         };
+    }
+
+    componentDidMount() {
+        this.loadItems(0);
     }
 
     loadItems(page) {
@@ -88,7 +81,7 @@ class App extends Component {
             }
 
             ref.setState({
-                clips: this.state.clips.concat(docs)
+                clips: List(this.state.clips.concat(docs))
             });
         });
     }
@@ -99,21 +92,23 @@ class App extends Component {
             const text = clip.text || '';
             const createdAt = moment.unix(clip.createdAtMs / 1000).format('dddd, MMMM Do, YYYY h:mm:ss A');
 
-            let className = '';
+            let className = 'clip-item';
             if (i === clipIndex) {
-                className = 'selected-clip';
+                className += ' selected-clip';
             }
-
-            const adiv = (
-                <div className={className} style={{textAlign: 'left', wordWrap: 'break-word'}} tabIndex={i} ref={i === 0 && this.setTextInputRef}>
-                    {createdAt}:
-                    <pre style={{wordWrap: 'break-word'}}>{text}</pre>
-                </div>
-            );
 
             return (
                 <LazyLoad height={20} key={`${clip.createdAtMs}-${i}`}>
-                    {adiv}
+                    <div
+                        className={className}
+                        data-text={text}
+                        style={{textAlign: 'left', wordWrap: 'break-word'}}
+                        tabIndex={i}
+                        ref={i === 0 && this.setTextInputRef}
+                    >
+                        <p>{createdAt}:</p>
+                        <pre style={{wordWrap: 'break-word'}}>{text}</pre>
+                    </div>
                 </LazyLoad>
             )
         });
