@@ -59,7 +59,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
 
-    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
+    const {default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} = require('electron-devtools-installer');
     [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].forEach(extension => {
         installExtension(extension)
             .then((name) => console.log(`Added Extension: ${name}`))
@@ -93,13 +93,17 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+const identity = (x) => x;
+
 // sample current app metadata
 const activeWin = require('active-win');
 let _currentApp = null;
 const _checkCurrentApp = () => {
-    (async () => {
-        _currentApp = await activeWin();
-    })();
+    activeWin()
+        .then(
+            (result) => _currentApp = result,
+            identity
+        )
 };
 setInterval(_checkCurrentApp, 200);
 ///////////////////////////////////////////////////
