@@ -99,3 +99,8 @@ global.currentClipboard = () => {
 global.hide = () => {
     win.hide();
 };
+
+global.writeToClipboard = (value) => {
+    clipboard.writeText(value);
+    console.log('copied', value);
+};

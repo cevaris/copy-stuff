@@ -8,6 +8,7 @@ import moment from 'moment';
 const Mousetrap = require('mousetrap');
 
 const remote = window.require('electron').remote;
+export const writeToClipboard = remote.getGlobal('writeToClipboard');
 const clipboard = remote.getGlobal('currentClipboard');
 const hideWindow = remote.getGlobal('hide');
 const db = remote.getGlobal('db');
@@ -35,7 +36,7 @@ const checkClipboardForChanges = () => {
 };
 
 export const getClips = (page, func) => {
-    const pageSize = 100;
+    const pageSize = 50;
 
     db.find({})
         .sort({createdAtMs: -1})
