@@ -31,12 +31,14 @@
     "electron": "^1.8.4",
     "electron-builder": "^20.5.1",
     "electron-connect": "^0.6.3",
+    "electron-devtools-installer": "^2.2.3",
     "flow-bin": "^0.68.0",
     "react-scripts": "1.1.1",
     "wait-on": "^2.1.0"
   },
   "dependencies": {
     "electron-is-dev": "^0.3.0",
+    "immutable": "^3.8.2",
     "moment": "^2.21.0",
     "mousetrap": "^1.6.1",
     "nedb": "^1.8.0",

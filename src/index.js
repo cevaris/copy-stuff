@@ -35,7 +35,7 @@ const checkClipboardForChanges = () => {
 };
 
 export const getClips = (page, func) => {
-    const pageSize = 10;
+    const pageSize = 100;
 
     db.find({})
         .sort({createdAtMs: -1})

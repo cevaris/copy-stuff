@@ -58,6 +58,14 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+
+    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
+    [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].forEach(extension => {
+        installExtension(extension)
+            .then((name) => console.log(`Added Extension: ${name}`))
+            .catch((err) => console.log('An error occurred: ', err));
+    });
+
     console.log('ready');
 
     createWindow();
