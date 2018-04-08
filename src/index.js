@@ -11,10 +11,17 @@ const remote = window.require('electron').remote;
 export const writeToClipboard = remote.getGlobal('writeToClipboard');
 const clipboard = remote.getGlobal('currentClipboard');
 const hideWindow = remote.getGlobal('hide');
+const sampleCurrentApp = remote.getGlobal('currentApp');
 const db = remote.getGlobal('db');
 let last = '';
+let currentApp = null;
 
 const checkClipboardForChanges = () => {
+    const sampledApp = sampleCurrentApp();
+    if(sampledApp && sampledApp.owner && sampledApp.owner.bundleId){
+        currentApp = sampledApp.owner.bundleId;
+    }
+
     const current = clipboard();
 
     // if clipboard sent junk

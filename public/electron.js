@@ -92,6 +92,22 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// sample current app metadata
+const activeWin = require('active-win');
+let _currentApp = null;
+const _checkCurrentApp = () => {
+    (async () => {
+        _currentApp = await activeWin();
+    })();
+};
+setInterval(_checkCurrentApp, 200);
+///////////////////////////////////////////////////
+
+global.currentApp = () => {
+    return _currentApp;
+};
+
 global.currentClipboard = () => {
     return clipboard.readText() || clipboard.readText('selection');
 };

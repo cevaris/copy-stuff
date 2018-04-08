@@ -37,6 +37,7 @@
     "wait-on": "^2.1.0"
   },
   "dependencies": {
+    "active-win": "^3.0.0",
     "electron-is-dev": "^0.3.0",
     "immutable": "^3.8.2",
     "moment": "^2.21.0",
