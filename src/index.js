@@ -9,10 +9,11 @@ const Mousetrap = require('mousetrap');
 
 const remote = window.require('electron').remote;
 export const writeToClipboard = remote.getGlobal('writeToClipboard');
-const clipboard = remote.getGlobal('currentClipboard');
-const hideWindow = remote.getGlobal('hide');
-const sampleCurrentApp = remote.getGlobal('currentApp');
 const db = remote.getGlobal('db');
+const clipboard = remote.getGlobal('currentClipboard');
+export const hideWindow = remote.getGlobal('hide');
+const sampleCurrentApp = remote.getGlobal('currentApp');
+
 let last = '';
 let currentApp = null;
 

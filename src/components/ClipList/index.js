@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
-import {getClips, handleErr, writeToClipboard} from "../../index";
+import {getClips, handleErr, hideWindow, writeToClipboard} from "../../index";
 import moment from 'moment';
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -23,28 +23,28 @@ class ClipList extends Component {
             this.textInput = element;
         };
 
-        Mousetrap.bind(['j', 'down'], (e) => {
+        Mousetrap.bind(['down'], (e) => {
             if (this.textInput) this.textInput.focus();
             let next = e.target.nextSibling;
-            if (next && e.target.className.includes('clip-item')) {
+            if (next && (next.className.includes('clip-item'))) {
                 next.focus();
             }
         });
-        Mousetrap.bind(['k', 'up'], (e) => {
+        Mousetrap.bind(['up'], (e) => {
             if (this.textInput) this.textInput.focus();
             let next = e.target.previousSibling;
-            if (next && e.target.className.includes('clip-item')) {
+            if (next && (next.className.includes('clip-item'))) {
                 next.focus();
             }
         });
         Mousetrap.bind(['enter'], this.copyClip);
     }
 
-    copyClip(e) {
+    copyClip = (e) => {
         let target = e.target;
 
         // onclick may have been child class, look at parent
-        if(e.target.parentElement.className.includes('clip-item')){
+        if (e.target.parentElement.className.includes('clip-item')) {
             target = e.target.parentElement;
         }
 
@@ -52,13 +52,18 @@ class ClipList extends Component {
         if (data && data.trim()) {
             writeToClipboard(data);
         }
-    }
+
+        hideWindow();
+    };
 
     loadItems(page) {
         console.log(page);
 
         const ref = this;
-        getClips(page, {}, (err, docs) => {
+
+        const query = {};
+
+        getClips(page, query, (err, docs) => {
 
             if (handleErr(err)) return;
 
@@ -100,15 +105,17 @@ class ClipList extends Component {
 
     render() {
         return (
-            <div className="list">
-                <InfiniteScroll
-                    pageStart={-1} // actually load page 0
-                    loadMore={this.loadItems}
-                    hasMore={this.state.hasMoreItems}
-                    loader={<div className="loader" key={0}>Loading ...</div>}
-                >
-                    {this.renderItems()}
-                </InfiniteScroll>
+            <div>
+                <div className="list">
+                    <InfiniteScroll
+                        pageStart={-1} // actually load page 0
+                        loadMore={this.loadItems}
+                        hasMore={this.state.hasMoreItems}
+                        loader={<div className="loader" key={0}>Loading ...</div>}
+                    >
+                        {this.renderItems()}
+                    </InfiniteScroll>
+                </div>
             </div>
         );
     }
