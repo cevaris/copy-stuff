@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
-import {getClips, handleErr, hideWindow, writeToClipboard} from "../../index";
+import {getClips, handleErr, hideWindow, writeToClipboard, reloadApp} from "../../index";
 import moment from 'moment';
 import InfiniteScroll from 'react-infinite-scroller';
 

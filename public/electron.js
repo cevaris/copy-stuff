@@ -39,12 +39,11 @@ function createWindow() {
     win.setAlwaysOnTop(true, "floating");
     win.setVisibleOnAllWorkspaces(true);
     win.setFullScreenable(false);
-    //win.hide();
     hide();
 
     win.on('blur', () => {
         console.log('hiding');
-        win.hide();
+        hide();
     });
 
     globalShortcut.register('ctrl+super+v', () => {
@@ -118,8 +117,13 @@ global.currentClipboard = () => {
 };
 
 global.hide = () => {
+    // https://github.com/electron/electron/issues/2640
     Menu.sendActionToFirstResponder('hide:');
     win.hide();
+};
+
+global.reloadApp = () => {
+    win.reload();
 };
 
 global.writeToClipboard = (value) => {

@@ -13,6 +13,7 @@ const db = remote.getGlobal('db');
 const clipboard = remote.getGlobal('currentClipboard');
 export const hideWindow = remote.getGlobal('hide');
 const sampleCurrentApp = remote.getGlobal('currentApp');
+export const reloadApp = remote.getGlobal('reloadApp');
 
 let last = '';
 let currentApp = null;
