@@ -1,4 +1,4 @@
-const {app, clipboard, globalShortcut, BrowserWindow} = require('electron');
+const {app, clipboard, globalShortcut, BrowserWindow, Menu} = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
@@ -35,11 +35,12 @@ function createWindow() {
         win = null
     });
 
-    app.dock.hide();
+    app.dock.hide(); //hides app in alt+tab dock
     win.setAlwaysOnTop(true, "floating");
     win.setVisibleOnAllWorkspaces(true);
     win.setFullScreenable(false);
-    win.hide();
+    //win.hide();
+    hide();
 
     win.on('blur', () => {
         console.log('hiding');
@@ -117,6 +118,7 @@ global.currentClipboard = () => {
 };
 
 global.hide = () => {
+    Menu.sendActionToFirstResponder('hide:');
     win.hide();
 };
 
