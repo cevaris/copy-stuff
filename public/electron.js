@@ -150,9 +150,18 @@ function waitUntilWindowIsHidden() {
         }, 5)
     })
 }
+
 global.pasteClipboard = () => {
     waitUntilWindowIsHidden().then(() => {
         robot.keyTap('v', 'command')
     });
+};
+
+global.triggerTab = () => {
+    robot.keyTap('tab');
+};
+
+global.triggerShiftTab = () => {
+    robot.keyTap('tab', 'shift');
 };
 

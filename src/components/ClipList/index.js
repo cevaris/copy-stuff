@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
-import {getClips, handleErr, hideWindow, writeToClipboard, reloadApp, pasteClipboard} from "../../index";
+import {getClips, handleErr, hideWindow, writeToClipboard, reloadApp, pasteClipboard, triggerShiftTab, triggerTab} from "../../index";
 import moment from 'moment';
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -18,24 +18,27 @@ class ClipList extends Component {
 
         this.loadItems = this.loadItems.bind(this);
         this.copyClip = this.copyClip.bind(this);
-        this.textInput = null;
-        this.setTextInputRef = element => {
-            this.textInput = element;
-        };
+        // this.textInput = null;
+        // this.setTextInputRef = element => {
+        //     this.textInput = element;
+        // };
 
         Mousetrap.bind(['down'], (e) => {
-            if (this.textInput) this.textInput.focus();
-            let next = e.target.nextSibling;
-            if (next && (next.className.includes('clip-item'))) {
-                next.focus();
-            }
+            //if (this.textInput) this.textInput.focus();
+            triggerTab();
+            // let next = e.target.nextSibling;
+            // if (next && (next.className.includes('clip-item'))) {
+            //     next.focus();
+            // }
         });
         Mousetrap.bind(['up'], (e) => {
-            if (this.textInput) this.textInput.focus();
-            let next = e.target.previousSibling;
-            if (next && (next.className.includes('clip-item'))) {
-                next.focus();
-            }
+            //if (this.textInput) this.textInput.focus();
+            triggerShiftTab();
+            //robot.keyTap('shift','tab');
+            // let next = e.target.previousSibling;
+            // if (next && (next.className.includes('clip-item'))) {
+            //     next.focus();
+            // }
         });
         Mousetrap.bind(['enter'], this.copyClip);
     }
@@ -93,8 +96,8 @@ class ClipList extends Component {
                         data-text={text}
                         onClick={this.copyClip}
                         style={{textAlign: 'left', wordWrap: 'break-word'}}
-                        tabIndex={i}
-                        ref={i === 0 && this.setTextInputRef}
+                        tabIndex={i + 1}
+                        //ref={i === 0 && this.setTextInputRef}
                     >
                         <p>{createdAt}:</p>
                         <pre style={{wordWrap: 'break-word'}}>{text}</pre>

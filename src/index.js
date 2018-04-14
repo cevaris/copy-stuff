@@ -15,6 +15,8 @@ export const hideWindow = remote.getGlobal('hide');
 const sampleCurrentApp = remote.getGlobal('currentApp');
 export const reloadApp = remote.getGlobal('reloadApp');
 export const pasteClipboard = remote.getGlobal('pasteClipboard');
+export const triggerTab = remote.getGlobal('triggerTab');
+export const triggerShiftTab = remote.getGlobal('triggerShiftTab');
 
 let last = '';
 let currentApp = null;
