@@ -14,6 +14,7 @@ const clipboard = remote.getGlobal('currentClipboard');
 export const hideWindow = remote.getGlobal('hide');
 const sampleCurrentApp = remote.getGlobal('currentApp');
 export const reloadApp = remote.getGlobal('reloadApp');
+export const pasteClipboard = remote.getGlobal('pasteClipboard');
 
 let last = '';
 let currentApp = null;

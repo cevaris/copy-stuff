@@ -1,6 +1,7 @@
 const {app, clipboard, globalShortcut, BrowserWindow, Menu} = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const robot = require('robotjs');
 
 const Datastore = require('nedb');
 global.db = new Datastore({
@@ -130,3 +131,28 @@ global.writeToClipboard = (value) => {
     clipboard.writeText(value);
     console.log('copied', value);
 };
+
+// HACK!! https://github.com/octalmage/robotjs/issues/336
+function waitUntilWindowIsHidden() {
+    return new Promise((resolve, reject) => {
+        let tries = 1;
+        const maxTries = 10;
+        const interval = setInterval(() => {
+            if (!win.isVisible() || tries > maxTries) {
+                tries++;
+                clearInterval(interval);
+                if (tries > maxTries) {
+                    reject('main window is still open')
+                } else {
+                    resolve()
+                }
+            }
+        }, 5)
+    })
+}
+global.pasteClipboard = () => {
+    waitUntilWindowIsHidden().then(() => {
+        robot.keyTap('v', 'command')
+    });
+};
+
