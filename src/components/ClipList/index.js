@@ -30,9 +30,7 @@ class ClipList extends Component {
             if (handleErr(err)) return;
 
             if (!docs || docs.length === 0) {
-                ref.setState({
-                    hasMoreItems: false
-                });
+                ref.setState({hasMoreItems: false});
                 return;
             }
 
@@ -48,7 +46,12 @@ class ClipList extends Component {
             const createdAt = moment.unix(clip.createdAtMs / 1000).format('dddd, MMMM Do, YYYY h:mm:ss A');
 
             return (
-                <LazyLoad height={20} key={`${clip.createdAtMs}-${i}`}>
+                <LazyLoad
+                    height={0} // has to be 0 for InfiniteScroll.loadMore to fire
+                    key={`${clip.createdAtMs}-${i}`}
+                    resize={true}
+                    overflow={true}
+                >
                     <div
                         className={'clip-item'}
                         data-text={text}
@@ -65,13 +68,14 @@ class ClipList extends Component {
     }
 
     render() {
+        const loader = (<div className="loader" key={this.state.clips.size + 1}>Loading ...</div>);
         return (
             <div className="list">
                 <InfiniteScroll
                     pageStart={-1} // actually load page 0
                     loadMore={this.loadItems}
                     hasMore={this.state.hasMoreItems}
-                    loader={<div className="loader" key={0}>Loading ...</div>}
+                    loader={loader}
                 >
                     {this.renderItems()}
                 </InfiniteScroll>

@@ -23,7 +23,7 @@ let currentApp = null;
 
 const checkClipboardForChanges = () => {
     const sampledApp = sampleCurrentApp();
-    if(sampledApp && sampledApp.owner && sampledApp.owner.bundleId){
+    if (sampledApp && sampledApp.owner && sampledApp.owner.bundleId) {
         currentApp = sampledApp;
     }
 
@@ -68,7 +68,7 @@ export const getClips = (page, param, func) => {
 };
 
 const mkClip = (clip, app) => {
-        const unixMs = moment.utc().valueOf();
+    const unixMs = moment.utc().valueOf();
     return {
         text: clip,
         createdAtMs: unixMs,
