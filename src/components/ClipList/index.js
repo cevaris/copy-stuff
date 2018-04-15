@@ -56,11 +56,10 @@ class ClipList extends Component {
                         className={'clip-item'}
                         data-text={text}
                         onClick={this.copyClip}
-                        style={{textAlign: 'left', wordWrap: 'break-word'}}
                         tabIndex={i + 1}
                     >
                         <p>{createdAt}:</p>
-                        <pre style={{wordWrap: 'break-word'}} className={'clip-text'}>{text}</pre>
+                        <pre className={'clip-text'}>{text}</pre>
                     </div>
                 </LazyLoad>
             )
