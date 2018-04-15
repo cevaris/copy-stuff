@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
 import {getClips, handleErr} from "../../index";
 import moment from 'moment';
-import InfiniteScroll from 'react-infinite-scroller';
 
 const {List} = require('immutable');
 
@@ -11,31 +10,16 @@ class ClipList extends Component {
         super(props);
 
         this.state = {
-            clips: [],
-            hasMoreItems: true
+            clips: List(),
         };
-
-        this.loadItems = this.loadItems.bind(this);
     }
 
-    loadItems(page) {
-        console.log(page);
-
+    componentWillMount() {
         const ref = this;
-
-        const query = {};
-
-        getClips(page, query, (err, docs) => {
-
+        getClips(0, {}, (err, docs) => {
             if (handleErr(err)) return;
-
-            if (!docs || docs.length === 0) {
-                ref.setState({hasMoreItems: false});
-                return;
-            }
-
             ref.setState({
-                clips: List(this.state.clips.concat(docs))
+                clips: this.state.clips.concat(docs)
             });
         });
     }
@@ -67,17 +51,9 @@ class ClipList extends Component {
     }
 
     render() {
-        const loader = (<div className="loader" key={this.state.clips.size + 1}>Loading ...</div>);
         return (
             <div className="list">
-                <InfiniteScroll
-                    pageStart={-1} // actually load page 0
-                    loadMore={this.loadItems}
-                    hasMore={this.state.hasMoreItems}
-                    loader={loader}
-                >
-                    {this.renderItems()}
-                </InfiniteScroll>
+                {this.renderItems()}
             </div>
         );
     }

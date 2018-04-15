@@ -57,7 +57,7 @@ const checkClipboardForChanges = () => {
 };
 
 export const getClips = (page, param, func) => {
-    const pageSize = 50;
+    const pageSize = 500;
     const searchParam = param || {};
 
     db.find(searchParam)
