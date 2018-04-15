@@ -57,7 +57,7 @@ class ClipList extends Component {
                         tabIndex={i + 1}
                     >
                         <p>{createdAt}:</p>
-                        <pre style={{wordWrap: 'break-word'}}>{text}</pre>
+                        <pre style={{wordWrap: 'break-word'}} className={'clip-text'}>{text}</pre>
                     </div>
                 </LazyLoad>
             )
