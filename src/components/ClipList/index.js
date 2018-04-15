@@ -1,19 +1,9 @@
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
-import {
-    getClips,
-    handleErr,
-    hideWindow,
-    writeToClipboard,
-    reloadApp,
-    pasteClipboard,
-    triggerShiftTab,
-    triggerTab
-} from "../../index";
+import {getClips, handleErr} from "../../index";
 import moment from 'moment';
 import InfiniteScroll from 'react-infinite-scroller';
 
-const Mousetrap = require('mousetrap');
 const {List} = require('immutable');
 
 class ClipList extends Component {
@@ -26,33 +16,7 @@ class ClipList extends Component {
         };
 
         this.loadItems = this.loadItems.bind(this);
-        this.copyClip = this.copyClip.bind(this);
-
-        Mousetrap.bind(['down'], () => {
-            triggerTab();
-        });
-        Mousetrap.bind(['up'], () => {
-            triggerShiftTab();
-        });
-        Mousetrap.bind(['enter'], this.copyClip);
     }
-
-    copyClip = (e) => {
-        let target = e.target;
-
-        // onclick may have been child class, look at parent
-        if (e.target.parentElement.className.includes('clip-item')) {
-            target = e.target.parentElement;
-        }
-
-        const data = target.getAttribute('data-text');
-        if (data && data.trim()) {
-            writeToClipboard(data);
-        }
-
-        pasteClipboard();
-        hideWindow();
-    };
 
     loadItems(page) {
         console.log(page);
@@ -91,7 +55,6 @@ class ClipList extends Component {
                         onClick={this.copyClip}
                         style={{textAlign: 'left', wordWrap: 'break-word'}}
                         tabIndex={i + 1}
-                        //ref={i === 0 && this.setTextInputRef}
                     >
                         <p>{createdAt}:</p>
                         <pre style={{wordWrap: 'break-word'}}>{text}</pre>
@@ -103,17 +66,15 @@ class ClipList extends Component {
 
     render() {
         return (
-            <div>
-                <div className="list">
-                    <InfiniteScroll
-                        pageStart={-1} // actually load page 0
-                        loadMore={this.loadItems}
-                        hasMore={this.state.hasMoreItems}
-                        loader={<div className="loader" key={0}>Loading ...</div>}
-                    >
-                        {this.renderItems()}
-                    </InfiniteScroll>
-                </div>
+            <div className="list">
+                <InfiniteScroll
+                    pageStart={-1} // actually load page 0
+                    loadMore={this.loadItems}
+                    hasMore={this.state.hasMoreItems}
+                    loader={<div className="loader" key={0}>Loading ...</div>}
+                >
+                    {this.renderItems()}
+                </InfiniteScroll>
             </div>
         );
     }

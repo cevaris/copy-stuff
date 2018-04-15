@@ -1,21 +1,13 @@
 import React, {Component} from 'react';
 import ClipList from "./components/ClipList";
 import ClipSearch from "./components/ClipSearch";
-
-const Mousetrap = require('mousetrap');
+import ClipBindings from "./components/ClipBindings";
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-
-        Mousetrap.bind(['pageup', 'pagedown'], () => {
-            return false; //disable
-        });
-    }
-
     render() {
         return (
             <div className="App">
+                <ClipBindings/>
                 <ClipSearch/>
                 <ClipList/>
             </div>
