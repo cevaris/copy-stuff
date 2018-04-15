@@ -1,6 +1,15 @@
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
-import {getClips, handleErr, hideWindow, writeToClipboard, reloadApp, pasteClipboard, triggerShiftTab, triggerTab} from "../../index";
+import {
+    getClips,
+    handleErr,
+    hideWindow,
+    writeToClipboard,
+    reloadApp,
+    pasteClipboard,
+    triggerShiftTab,
+    triggerTab
+} from "../../index";
 import moment from 'moment';
 import InfiniteScroll from 'react-infinite-scroller';
 
@@ -18,27 +27,12 @@ class ClipList extends Component {
 
         this.loadItems = this.loadItems.bind(this);
         this.copyClip = this.copyClip.bind(this);
-        // this.textInput = null;
-        // this.setTextInputRef = element => {
-        //     this.textInput = element;
-        // };
 
-        Mousetrap.bind(['down'], (e) => {
-            //if (this.textInput) this.textInput.focus();
+        Mousetrap.bind(['down'], () => {
             triggerTab();
-            // let next = e.target.nextSibling;
-            // if (next && (next.className.includes('clip-item'))) {
-            //     next.focus();
-            // }
         });
-        Mousetrap.bind(['up'], (e) => {
-            //if (this.textInput) this.textInput.focus();
+        Mousetrap.bind(['up'], () => {
             triggerShiftTab();
-            //robot.keyTap('shift','tab');
-            // let next = e.target.previousSibling;
-            // if (next && (next.className.includes('clip-item'))) {
-            //     next.focus();
-            // }
         });
         Mousetrap.bind(['enter'], this.copyClip);
     }
